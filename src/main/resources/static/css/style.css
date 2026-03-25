@@ -1,0 +1,252 @@
+/* Simple, clean, minimalist styling */
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-color: #f8fafc;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --error-color: #ef4444;
+    --success-color: #10b981;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Auth Pages Centering */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Clean Cards */
+.auth-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-main);
+}
+
+.card-header p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+/* Alerts */
+.alert {
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.alert.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+.alert.success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Links */
+.card-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.link {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard / Movie Listing */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dashboard-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.dashboard-header .btn {
+    width: auto;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.movie-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.movie-poster {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    background: #e2e8f0;
+}
+
+.movie-info {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-main);
+}
+
+.movie-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.movie-genre {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: auto;
+    align-self: flex-start;
+}

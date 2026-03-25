@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cenifex - Select Seats</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .theater-screen-map {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .screen-curve {
+            width: 80%;
+            height: 40px;
+            margin: 0 auto 3rem auto;
+            border-top: 4px solid var(--border-color);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            position: relative;
+        }
+
+        .screen-curve::after {
+            content: "SCREEN THIS WAY";
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        /* 20 seats per row + 2 gaps = 22 columns approx, handled by inline styles dynamically */
+        .seat-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        .row-label {
+            width: 30px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: right;
+            margin-right: 1rem;
+        }
+
+        .seat {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--primary-color);
+            border-radius: 4px 4px 10px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem;
+            color: transparent;
+        }
+
+        .seat.available {
+            background-color: #fff;
+        }
+
+        .seat.available:hover {
+            background-color: #e0f2fe;
+        }
+
+        .seat.selected {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: #fff;
+        }
+
+        .seat.booked {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+            cursor: not-allowed;
+            color: #94a3b8;
+        }
+
+        /* Legend */
+        .seat-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Booking Bar */
+        .booking-bar {
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+
+        .booking-summary {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .booking-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .booking-seats-list {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .btn-pay {
+            width: auto;
+            padding: 0.75rem 2.5rem;
+            font-size: 1.1rem;
+        }
+    </style>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <div class="dashboard-container" style="padding-bottom: 0;">
+        <header class="dashboard-header">
+            <h2>
+                <a href="javascript:history.back()" style="text-decoration: none; color: inherit;">&larr; Back to Movie</a>
+            </h2>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </header>
+
+        <main class="dashboard-content">
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">Select Your Seats</h3>
+            
+            <div id="loadingIndicator" style="text-align: center; padding: 2rem; color: #64748b;">
+                Loading seat map...
+            </div>
+            
+            <div id="errorState" class="alert error hidden">
+                Failed to load seats. Please try again.
+            </div>
+
+            <div id="contentArea" class="hidden">
+                <div class="seat-legend">
+                    <div class="legend-item">
+                        <div class="seat available"></div> Available
+                    </div>
+                    <div class="legend-item">
+                        <div class="seat selected"></div> Selected
+                    </div>
+                    <div class="legend-item">
+                        <div class="seat booked">X</div> Booked
+                    </div>
+                </div>
+
+                <div class="theater-screen-map">
+                    <div class="screen-curve"></div>
+                    <div id="seatGrid">
+                        <!-- Rows injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Sticky footer -->
+    <div id="bookingBar" class="booking-bar hidden">
+        <div class="booking-summary">
+            <div id="totalAmount" class="booking-total">₹0</div>
+            <div id="selectedSeatsLabel" class="booking-seats-list">No seats selected</div>
+        </div>
+        <button id="checkoutBtn" class="btn btn-primary btn-pay" disabled>Pay Now</button>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="alertBox" class="alert hidden" style="position: fixed; top: 20px; right: 20px; z-index: 1000; min-width: 300px;"></div>
+
+    <script src="/js/seat-selection.js"></script>
+</body>
+</html>

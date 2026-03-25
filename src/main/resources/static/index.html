@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cenifex - Movies</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h2 id="welcomeMessage">Cenifex</h2>
+            <div>
+                <a href="/my-bookings.html" class="btn btn-primary" style="margin-right: 10px;">My Bookings</a>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">Recommended Movies</h3>
+            
+            <!-- Movie Loading State -->
+            <div id="loadingIndicator" style="text-align: center; padding: 2rem; color: #64748b;">
+                Loading movies...
+            </div>
+
+            <!-- Movie Grid -->
+            <div id="moviesGrid" class="movies-grid hidden">
+                <!-- Movies will be rendered here via JS -->
+            </div>
+            
+            <!-- Error State -->
+            <div id="errorState" class="alert error hidden">
+                Failed to load movies. Please try again later.
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
